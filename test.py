@@ -1,15 +1,14 @@
-import PyQt5.QtCore as core
-import PyQt5.QtGui as gui
-import PyQt5.QtWidgets as wdgts
-
-import sys, os, time, functools, asyncio
-import numpy as np
-import cv2
+import os
 import sqlite3
+import sys
 
 import PIL.Image as Img
 import PIL.ImageEnhance as Enhance
-import json
+import PyQt5.QtCore as core
+import PyQt5.QtGui as gui
+import PyQt5.QtWidgets as wdgts
+import cv2
+import numpy as np
 
 
 class ProcessingThread(core.QThread):
@@ -69,7 +68,7 @@ class Ui_Dialog(wdgts.QMainWindow):
         self.text_edit_material_id.clear()
 
     def push_button_add_click(self):
-        material_name = self.text_edit_material.toPlainText()
+        material_name = self.text_edit_material_id.toPlainText()
         material_area = self.text_edit_material_area.toPlainText()
         material_area_std = self.text_edit_material_area_std.toPlainText()
         material_porous = self.text_edit_material_porous.toPlainText()
@@ -118,7 +117,7 @@ class Ui_Dialog(wdgts.QMainWindow):
             self.tableWidget.renoveRow(0)
 
         self.tableWidget.setColumnCount(6)
-        self.tableWidget.setRowCount (len(self.materials))
+        self.tableWidget.setRowCount(len(self.materials))
 
         self.tableWidget.setHorizontalHeaderLabels(['ID', 'Наименование', 'Площадь поры', 'Откл. от площади',
                                                     'Пористость', 'Откл. от пористости'])
@@ -338,7 +337,7 @@ class MainWindow(wdgts.QMainWindow):
     def set_result_frame(self, image):
         self.result_img = image
         image, pore, bad_pores = self.explore(image)
-        image = gui.QImage(image.data, image.shape[1], image.shape[0], gui.QImage.Format_RGB888)
+        image = gui.QImage(image.data, image.shape[1], image.shape[1], gui.QImage.Format_RGB888)
         if self.mat_porous - self.mat_porous_std <= pore <= self.mat_porous + self.mat_porous_std:
             pore_rep = 'общая пористость в норме'
         else:
@@ -508,11 +507,11 @@ class MainWindow(wdgts.QMainWindow):
         self.transformed_frame.setMaximumSize(core.QSize(300, 300))
         self.transformed_frame.setObjectName('transformed_frame')
 
-        self.gridLayout.addWidget(self.transformed_frame, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.transformed_frame, 0, 1, 1, 1)
 
         self.result_frame = wdgts.QLabel(self.gridFrame)
         self.result_frame.setMinimumSize(core.QSize(300, 300))
-        self.result_frame.setMaximumSize(core.QSize(300 ,300))
+        self.result_frame.setMaximumSize(core.QSize(300, 300))
         self.result_frame.setObjectName('result_frame')
 
         self.gridLayout.addWidget(self.result_frame, 1, 0, 1, 1)
